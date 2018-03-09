@@ -12,9 +12,12 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "word_table")
 public class Word {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    /*@PrimaryKey(autoGenerate = true)
+    private int id=0;
+*/
 
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "word")
     private String word;
 
@@ -23,9 +26,9 @@ public class Word {
         this.word = word;
     }
 
-    public int getId() {
+    /*public int getId() {
         return id;
-    }
+    }*/
 
     public String getWord() {
         return word;
