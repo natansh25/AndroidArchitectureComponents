@@ -13,7 +13,7 @@ import android.content.Context;
  */
 
 
-@Database(entities = {Word.class}, version = 1)
+@Database(entities = {Word.class}, version = 2)
 public abstract class WordRoomDatabase extends RoomDatabase {
 
     private static WordRoomDatabase INSTANCE;
@@ -27,6 +27,7 @@ public abstract class WordRoomDatabase extends RoomDatabase {
                     // Create database here
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             WordRoomDatabase.class, "word_database")
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }

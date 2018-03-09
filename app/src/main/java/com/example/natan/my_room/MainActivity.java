@@ -17,6 +17,7 @@ import android.widget.EditText;
 
 import com.example.natan.my_room.Database.Word;
 import com.example.natan.my_room.ViewModel.WordViewModel;
+import com.facebook.stetho.Stetho;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         edt_word = findViewById(R.id.edt_word);
+        Stetho.initializeWithDefaults(this);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
