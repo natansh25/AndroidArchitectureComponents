@@ -17,11 +17,26 @@ import java.util.List;
 
 public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.MyViewHolder> {
 
+    private final RecyclerViewClickListener mListener;
     private LayoutInflater mInflater;
     private List<Word> mWords; // Cached copy of words
 
-    WordListAdapter(Context context) {
+
+    // on click listner
+
+    public interface RecyclerViewClickListener {
+
+        //if we want to on click the item index value
+        //void onClick(View view, int position);
+
+        //if we want the whole object to retrive the items
+        void onClick(Word word);
+    }
+
+
+    WordListAdapter(Context context, RecyclerViewClickListener clickListener) {
         mInflater = LayoutInflater.from(context);
+        mListener = clickListener;
     }
 
 
@@ -35,6 +50,8 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Word current = mWords.get(position);
         holder.wordItemView.setText(current.getWord());
+        //setting the tag to retrive it in the delete
+        holder.itemView.setTag(current.getId());
 
 
     }
@@ -51,7 +68,7 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.MyView
         else return 0;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView wordItemView;
 
@@ -59,6 +76,17 @@ public class WordListAdapter extends RecyclerView.Adapter<WordListAdapter.MyView
         public MyViewHolder(View itemView) {
             super(itemView);
             wordItemView = itemView.findViewById(R.id.txt_custom);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            int adapterPosition = getAdapterPosition();
+            Word word=mWords.get(adapterPosition);
+            mListener.onClick(word);
+
+
         }
     }
 }

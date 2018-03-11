@@ -41,8 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
         final WordListAdapter adapter = new WordListAdapter(this, new WordListAdapter.RecyclerViewClickListener() {
             @Override
-            public void onClick(int id) {
-                Toast.makeText(MainActivity.this, String.valueOf(id), Toast.LENGTH_SHORT).show();
+            public void onClick(Word word) {
+                Toast.makeText(MainActivity.this, String.valueOf("Hurray !!"), Toast.LENGTH_SHORT).show();
+                mWordViewModel.deleteobj(word);
             }
         });
         recyclerView.setAdapter(adapter);
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
 
                 int id = (int) viewHolder.itemView.getTag();
-                mWordViewModel.delete(id);
+                //mWordViewModel.deleteobj(id);
 
 
             }
