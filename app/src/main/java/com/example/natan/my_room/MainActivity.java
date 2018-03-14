@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(Word word) {
                 Toast.makeText(MainActivity.this, String.valueOf("Hurray !!"), Toast.LENGTH_SHORT).show();
-                mWordViewModel.deleteobj(word);
+                //mWordViewModel.deleteobj(word);
             }
         });
         recyclerView.setAdapter(adapter);
@@ -83,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
                 int id = (int) viewHolder.itemView.getTag();
                 //mWordViewModel.deleteobj(id);
+                mWordViewModel.vDeleteByID(id);
 
 
             }
