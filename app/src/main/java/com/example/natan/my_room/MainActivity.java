@@ -2,18 +2,22 @@ package com.example.natan.my_room;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -26,7 +30,8 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private WordViewModel mWordViewModel;
-    private EditText edt_word;
+    private EditText edt_word, edt_update;
+    private Button btn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +40,57 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         edt_word = findViewById(R.id.edt_word);
+        edt_update = findViewById(R.id.edit1);
+        btn = findViewById(R.id.btn_add);
         Stetho.initializeWithDefaults(this);
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
 
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String nmae = edt_word.getText().toString();
+                Word word = new Word(nmae);
+                mWordViewModel.insert(word);
+                edt_word.setText(" ");
+            }
+        });
+
         final WordListAdapter adapter = new WordListAdapter(this, new WordListAdapter.RecyclerViewClickListener() {
             @Override
-            public void onClick(Word word) {
+            public void onClick(final Word word) {
                 Toast.makeText(MainActivity.this, String.valueOf("Hurray !!"), Toast.LENGTH_SHORT).show();
-                //mWordViewModel.deleteobj(word);
+
+                showChangeLangDialog(word);
+
+
+                //btn.setText("Update");
+
+                /*btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (btn.getText() == "UPDATE") {
+
+                            String name = edt_word.getText().toString();
+                            word.setWord(name);
+                            mWordViewModel.update(word);
+                            edt_word.setText(" ");
+                            btn.setText("ADD");
+
+
+                        } else
+
+                        {
+
+                            String nmae = edt_word.getText().toString();
+                            Word word = new Word(nmae);
+                            mWordViewModel.insert(word);
+                            // edt_word.setText(" ");
+
+                        }
+                    }
+                });*/
             }
         });
         recyclerView.setAdapter(adapter);
@@ -92,6 +139,40 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void showChangeLangDialog(final Word word) {
+
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.custom_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
+        edt.setText(word.getWord());
+
+        dialogBuilder.setTitle("Custom dialog");
+        dialogBuilder.setMessage("Enter text below");
+        dialogBuilder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //do something with edt.getText().toString();
+                String name=edt.getText().toString();
+                word.setWord(name);
+                mWordViewModel.update(word);
+                //edt_word.setText(" ");
+                //btn.setText("ADD");
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                //pass
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
+
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -115,13 +196,5 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void save(View view) {
 
-        String nmae = edt_word.getText().toString();
-        Word word = new Word(nmae);
-        mWordViewModel.insert(word);
-        edt_word.setText(" ");
-
-
-    }
 }
